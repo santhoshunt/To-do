@@ -1,11 +1,31 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 
+import 'package:todo/storagefile.dart';
+
 class Home extends StatefulWidget {
+  final Storagefile storage;
+  Home({Key key, @required this.storage}) : super(key: key);
   @override
   _HomeState createState() => _HomeState();
 }
 
 class _HomeState extends State<Home> {
+  TextEditingController controller = TextEditingController();
+  String state;
+  Future<Directory> _appdir;
+
+  @override
+  void initState() {
+    super.initState();
+    widget.storage.readData().then((String value) {
+      setState(() {
+        state = value;
+      });
+    });
+  }
+
   String str = "";
   List arr = [];
   @override
@@ -41,11 +61,8 @@ class _HomeState extends State<Home> {
                 onSubmitted: (String value) {
                   print(value);
                   setState(() {
-                    List arr1 = arr;
-                    arr1.add(value);
+                    arr.add(value);
                     str = value;
-                    print(arr.toString());
-                    arr = arr1;
                   });
                 },
               ),
